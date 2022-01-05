@@ -1,0 +1,17 @@
+Write Up for Employee Training score analysis:--
+
+* For importing employee_data.json file to mongo we use the command
+ mongoimport employee_data.json -d test -c employeedata --drop --jsonArray
+
+* requirements:-
+1. Find the number of employees who failed in term 1 (pass mark = 37)
+   db.employeedata.find({"term1":{$lte",37}})
+
+2. Find the average score of employees for term 1
+   db.employeedata.aggregate([{$group:{'_id':'term1',average:{$avg:'$term1'}}}])
+
+3. Find employees who passed in all three terms
+   db.employeedata.find({$and:[{term1:{$gt:37}},{term2:{$gt:37}},{term3:{$gt:37}}]})
+
+4. Find the average score of employees
+   db.employeedata.aggregate([{$project:{average:{$avg:["$avg:["$term1","$term2","term3"]}}}])
